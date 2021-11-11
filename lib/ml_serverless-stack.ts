@@ -87,6 +87,8 @@ export class MLServerlessStack extends cdk.Stack {
       "input-bucket-s3-console.url",
       "input-bucket-name-output",
       "httpApi-url",
+      "curl-example",
+      "batch-inf-aws-cli",
     ];
     let values = [
       `https://${region}.console.aws.amazon.com/batch/home?region=${region}#dashboard`,
@@ -95,6 +97,8 @@ export class MLServerlessStack extends cdk.Stack {
       inputBucketOutput.value,
       inputBucketName.value,
       httpApiUrl.value,
+      `curl -v --request POST -H "Content-Type: application/jpeg" --data-binary @<your jpeg file name> ${httpApiUrl.value}predict`,
+      `aws s3 cp </path/to/jpeg file name/> s3://${inputBucketName.value}/input/`,
     ];
     let descriptions = [
       "Batch Dashboard",
@@ -103,6 +107,8 @@ export class MLServerlessStack extends cdk.Stack {
       "Input Bucket S3 Console URL",
       "S3 Input Bucket Name",
       "API URL",
+      "Curl Command example to test realtime inference",
+      "AWS CLI example to test batch inference",
     ];
 
     names.forEach((element, index) => {
@@ -110,11 +116,6 @@ export class MLServerlessStack extends cdk.Stack {
         value: values[index],
         description: descriptions[index],
       });
-    });
-
-    new cdk.CfnOutput(this, "CurlExample", {
-      value: `curl -v --request POST -H "Content-Type: application/jpeg" --data-binary @<your jpeg file name> ${httpApiUrl.value}predict`,
-      description: "Curl Command example to test API",
     });
   }
 }

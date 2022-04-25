@@ -18,7 +18,7 @@ The following diagram illustrates the solutions architecture for both batch and 
 ### To deploy the solution, open your terminal window and complete the following steps.
 
 1. Clone the GitHub repo <br />
-   `git clone https://github.com/aws-samples/aws-serverless-for-machinelearning-inference`
+   `git clone https://github.com/aws-samples/aws-serverless-for-machine-learning-inference.git`
 
 2. Navigate to the project directory and deploy the CDK application. <br />
    `./install.sh`

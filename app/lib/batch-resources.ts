@@ -1,12 +1,13 @@
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import * as path from "path";
-import batch = require("@aws-cdk/aws-batch");
-import ec2 = require("@aws-cdk/aws-ec2");
-import ecr = require("@aws-cdk/aws-ecr");
+import batch = require("aws-cdk-lib/aws-batch");
+import ec2 = require("aws-cdk-lib/aws-ec2");
+import ecr = require("aws-cdk-lib/aws-ecr");
 import ecrdeploy = require("cdk-ecr-deployment");
-import iam = require("@aws-cdk/aws-iam");
-import ssm = require("@aws-cdk/aws-ssm");
-import { DockerImageAsset } from "@aws-cdk/aws-ecr-assets";
+import iam = require("aws-cdk-lib/aws-iam");
+import ssm = require("aws-cdk-lib/aws-ssm");
+import { DockerImageAsset } from "aws-cdk-lib/aws-ecr-assets";
+import { Construct } from "constructs";
 
 const batchImageRepoName = "batch-ecr";
 const batchJobQueueName = "batch-queue";
@@ -26,7 +27,7 @@ export class BatchResources extends cdk.NestedStack {
   ecrPolicy: iam.PolicyStatement;
   ecrCleanUpRole: iam.Role;
 
-  constructor(scope: cdk.Construct, id: string, props: BatchResourcesProps) {
+  constructor(scope: Construct, id: string, props: BatchResourcesProps) {
     super(scope, id, props);
 
     // =====================================================================================
@@ -80,7 +81,7 @@ export class BatchResources extends cdk.NestedStack {
     );
 
     const batchInfImage = new DockerImageAsset(this, `${prefix}-image`, {
-      directory: path.join(__dirname, "../container_images/batch_image"),
+      directory: path.join(__dirname, "../../src/batch_image"),
     });
 
     const batchImagepush = new ecrdeploy.ECRDeployment(

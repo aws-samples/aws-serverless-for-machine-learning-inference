@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 import "source-map-support/register";
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import { MLServerlessStack } from "../lib/ml_serverless-stack";
-import { Tags } from "@aws-cdk/core";
 
 const app = new cdk.App();
 const mlBlog = new MLServerlessStack(app, "MLServerlessStack", {
@@ -26,4 +25,4 @@ const mlBlog = new MLServerlessStack(app, "MLServerlessStack", {
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
-Tags.of(mlBlog).add("Project", "MLServerless");
+cdk.Tags.of(mlBlog).add("Project", "MLServerless");

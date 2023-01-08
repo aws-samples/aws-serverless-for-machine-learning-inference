@@ -1,12 +1,13 @@
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import * as path from "path";
-import api = require("@aws-cdk/aws-apigateway");
-import cwlogs = require("@aws-cdk/aws-logs");
-import iam = require("@aws-cdk/aws-iam");
-import event_sources = require("@aws-cdk/aws-lambda-event-sources");
-import lambda = require("@aws-cdk/aws-lambda");
-import s3 = require("@aws-cdk/aws-s3");
-import ssm = require("@aws-cdk/aws-ssm");
+import api = require("aws-cdk-lib/aws-apigateway");
+import cwlogs = require("aws-cdk-lib/aws-logs");
+import iam = require("aws-cdk-lib/aws-iam");
+import event_sources = require("aws-cdk-lib/aws-lambda-event-sources");
+import lambda = require("aws-cdk-lib/aws-lambda");
+import s3 = require("aws-cdk-lib/aws-s3");
+import ssm = require("aws-cdk-lib/aws-ssm");
+import { Construct } from "constructs";
 
 const batchJobName = "ml-serverless-job";
 const inputBucketName = "ml-serverless-bucket";
@@ -26,7 +27,7 @@ export class LambdaResources extends cdk.NestedStack {
   inputBucketName: cdk.CfnOutput;
   rltInfFn: lambda.Function;
 
-  constructor(scope: cdk.Construct, id: string, props: LambdaResourcesProps) {
+  constructor(scope: Construct, id: string, props: LambdaResourcesProps) {
     super(scope, id, props);
 
     this.bucket = new s3.Bucket(this, inputBucketName, {
@@ -60,16 +61,19 @@ export class LambdaResources extends cdk.NestedStack {
       `${prefix}-mxnet-layer`,
       {
         code: lambda.Code.fromAsset(
-          path.join(__dirname, "../lambda_fn/realtime_inf/layers/layer.zip")
+          path.join(
+            __dirname,
+            "../../src/lambda_fn/realtime_inf/layers/mxnet.zip"
+          )
         ),
-        compatibleRuntimes: [lambda.Runtime.PYTHON_3_6],
+        compatibleRuntimes: [lambda.Runtime.PYTHON_3_7],
       }
     );
 
     const RealtimeFn = new lambda.Function(this, `${prefix}-realtime-Fn`, {
-      runtime: lambda.Runtime.PYTHON_3_6,
+      runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(
-        path.join(__dirname, "../lambda_fn/realtime_inf/realtime_fn")
+        path.join(__dirname, "../../src/lambda_fn/realtime_inf/realtime_fn")
       ),
       handler: "index.lambda_handler",
       layers: [sciPyMXNetLayer],
@@ -100,7 +104,9 @@ export class LambdaResources extends cdk.NestedStack {
     const batchJobQ = cdk.Fn.select(1, props.batchLambdaParam.stringListValue);
 
     const batchJobSubmitter = new lambda.Function(this, "batchJobSubmitterFn", {
-      code: lambda.Code.fromAsset("lambda_fn/batch_jobs_submitter"),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, "../../src/lambda_fn/batch_jobs_submitter")
+      ),
       runtime: lambda.Runtime.PYTHON_3_7,
       handler: "index.handler",
       timeout: cdk.Duration.seconds(30),

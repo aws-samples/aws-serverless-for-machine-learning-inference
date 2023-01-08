@@ -45,14 +45,16 @@ RUN pip3 install mxnet
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda clean -tipsy && \
+    # /opt/conda/bin/conda clean -tipsy && \
+    /opt/conda/bin/conda clean -tip && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda clean -afys
-RUN conda install python=3.6
+    # /opt/conda/bin/conda clean -afys
+    /opt/conda/bin/conda clean -af
+RUN conda install python=3.7
 RUN conda update -n base -c defaults conda
 RUN conda install -c anaconda boto3 numpy mxnet
 #COPY environment.yml /

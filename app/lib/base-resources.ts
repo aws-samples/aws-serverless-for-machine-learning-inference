@@ -1,5 +1,6 @@
-import * as cdk from "@aws-cdk/core";
-import ec2 = require("@aws-cdk/aws-ec2");
+import * as cdk from "aws-cdk-lib";
+import ec2 = require("aws-cdk-lib/aws-ec2");
+import { Construct } from "constructs";
 
 const prefix = "MLServerlessStack";
 
@@ -7,11 +8,11 @@ export class BaseResources extends cdk.NestedStack {
   vpc: ec2.Vpc;
   batchSg: ec2.SecurityGroup;
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.NestedStackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.NestedStackProps) {
     super(scope, id, props);
 
     this.vpc = new ec2.Vpc(this, `${prefix}-vpc`, {
-      cidr: "10.0.0.0/16",
+      ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"),
       maxAzs: 2,
     });
 

@@ -1,7 +1,9 @@
-import * as cdk from "@aws-cdk/core";
-import lambda = require("@aws-cdk/aws-lambda");
-import cr = require("@aws-cdk/custom-resources");
-import logs = require("@aws-cdk/aws-logs");
+import * as cdk from "aws-cdk-lib";
+import * as path from "path";
+import cr = require("aws-cdk-lib/custom-resources");
+import lambda = require("aws-cdk-lib/aws-lambda");
+import logs = require("aws-cdk-lib/aws-logs");
+import { Construct } from "constructs";
 import { BaseResources } from "./base-resources";
 import { LambdaResources } from "./lambda-resources";
 import { BatchResources } from "./batch-resources";
@@ -13,7 +15,7 @@ export class MLServerlessStack extends cdk.Stack {
   lambdaResources: LambdaResources;
   batchResources: BatchResources;
 
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     this.baseResources = new BaseResources(this, `${prefix}-base`);
@@ -44,7 +46,9 @@ export class MLServerlessStack extends cdk.Stack {
     // =====================================================================================
 
     const onEvent = new lambda.Function(this, `${prefix}-ecr-cleanup`, {
-      code: lambda.Code.fromAsset("lambda_fn/ecr_cleanup"),
+      code: lambda.Code.fromAsset(
+        path.join(__dirname, "../../src/lambda_fn/ecr_cleanup")
+      ),
       handler: "index.on_event",
       runtime: lambda.Runtime.PYTHON_3_7,
       timeout: cdk.Duration.seconds(60),
@@ -77,6 +81,7 @@ export class MLServerlessStack extends cdk.Stack {
         },
       }
     );
+
     const region = cdk.Aws.REGION;
     const acctId = cdk.Aws.ACCOUNT_ID;
 
@@ -97,7 +102,7 @@ export class MLServerlessStack extends cdk.Stack {
       inputBucketOutput.value,
       inputBucketName.value,
       httpApiUrl.value,
-      `curl -v --request POST -H "Content-Type: application/jpeg" --data-binary @<your jpeg file name> ${httpApiUrl.value}predict`,
+      `curl -v -H "Content-Type: application/jpeg" --data-binary @<your jpeg file name> ${httpApiUrl.value}predict`,
       `aws s3 cp </path/to/jpeg file name/> s3://${inputBucketName.value}/input/`,
     ];
     let descriptions = [

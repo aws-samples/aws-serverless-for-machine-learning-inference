@@ -4,16 +4,17 @@ This sample solution shows you how to run and scale ML inference using AWS serve
 
 ## Architecture
 
-The following diagram illustrates the solutions architecture for both batch and real-time inference options. 
+The following diagram illustrates the solutions architecture for both batch and real-time inference options.
 
-![architecture](architecture.png)
+![architecture](/src/architecture.png)
 
 ## Deploying the solution
 
 ### To deploy and run the solution, you need access to:
+
 - An AWS account
 - A terminal with [AWS Command Line Interface (CLI)](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html), [CDK](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#getting_started_install), [Docker](https://www.docker.com/), [git](https://git-scm.com/), and Python installed.
-  - You may use the terminal on your local machine or use an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment.
+  - You may use the terminal on your local X86_64 machine or use an [AWS Cloud9](https://aws.amazon.com/cloud9/) environment (This code is validated on a **m5.large** AWS Cloud9 instance).
 
 ### To deploy the solution, open your terminal window and complete the following steps.
 
@@ -23,8 +24,9 @@ The following diagram illustrates the solutions architecture for both batch and 
 2. Navigate to the project directory and deploy the CDK application. <br />
    `./install.sh`
    <br /> or <br />
-   `./cloud9_install.sh #If you are using AWS Cloud9` <br />
-   Enter `Y` to proceed with the deployment.
+   If using Cloud9: <br />
+   `./cloud9_install.sh` <br />
+3. Enter `Y` to proceed with the deployment on the confirmation screen.
 
 ## Running inference
 
@@ -45,13 +47,13 @@ Get real-time predictions by invoking the API endpoint with an image payload.
 
 1. Navigate to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/home) and find the API endpoint URL **_(httpAPIUrl)_** from the stack output.
 2. Use a REST client, like [Postman](https://www.postman.com/) or [curl](https://curl.se/) command, to send a **POST** request to the **_/predict_** api endpoint with image file payload.<br />
-   `curl --request POST -H "Content-Type: application/jpeg" --data-binary @<your jpg file name> <your-api-endpoint-url>/predict`
+   `curl -v -H "Content-Type: application/jpeg" --data-binary @<your jpg file name> <your-api-endpoint-url>/predict`
 3. Inference results are returned in the API response.
 
 ## Cleaning up
 
 Navigate to the project directory from the terminal window and run the following command to destroy all resources and avoid incurring future charges.<br />
-`cdk destroy`
+`cdk destroy -f`
 
 ## Security
 
@@ -59,4 +61,4 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 ## License
 
-This library is licensed under the MIT-0 License. See the LICENSE file.
+This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.

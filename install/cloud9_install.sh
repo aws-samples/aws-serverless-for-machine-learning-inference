@@ -11,27 +11,37 @@ aws configure get default.region
 
 NPM=$(command -v npm)
 
-echo "Checking CDK Status"
+echo "Checking CDK if is installed"
 if ! command -v cdk &> /dev/null; then
     echo -e "CDK is required, but it is not installed. \nInstalling CDK"
     $NPM install --prefix . aws-cdk
 else
     echo "Updating CDK"
-    $NPM update --prefix . aws-cdk
+    $NPM update -g aws-cdk
 fi
 
-echo "Installing Typescript"
-$NPM install typescript
+echo "Checking if Typescript is installed"
+if ! command -v tsc &> /dev/null; then
+    echo "Installing Typescript"
+    $NPM install typescript
+else
+    echo "Typescript is installed"
+fi
+
+if [ ! -f ../src/lambda_fn/realtime_inf/layers/mxnet.zip ]
+then
+    echo "Creating SciPy and MXNet Lambda layer artifact"
+    cd ../src/lambda_fn/realtime_inf/layers/
+    chmod +x create-layer.sh
+    sh create-layer.sh 3.7 && cd -
+else
+    echo "Found existing mxnet.zip"
+fi
 
 echo "Installing Node Modules"
+cd ../app
 
-cat cdkmodules.txt | xargs $NPM install --prefix .
-
-echo "Creating SciPy and MXNet Lambda layer artifact"
-cd lambda_fn/realtime_inf/layers/
-chmod +x create-layer.sh
-sudo sh create-layer.sh 3.6
-cd -
+$NPM install
 
 echo "Deploying CDK Application"
 CDK=$(command -v cdk)

@@ -21,7 +21,7 @@ The following diagram illustrates the solutions architecture for both batch and 
 1. Clone the GitHub repo <br />
    `git clone https://github.com/aws-samples/aws-serverless-for-machine-learning-inference.git`
 
-2. Navigate to the project directory and deploy the CDK application. <br />
+2. Navigate to the `/install` directory and deploy the CDK application. <br />
    `./install.sh`
    <br /> or <br />
    If using Cloud9: <br />
@@ -52,7 +52,7 @@ Get real-time predictions by invoking the API endpoint with an image payload.
 
 ## Cleaning up
 
-Navigate to the project directory from the terminal window and run the following command to destroy all resources and avoid incurring future charges.<br />
+Navigate to the `/app` directory from the terminal window and run the following command to destroy all resources and avoid incurring future charges.<br />
 `cdk destroy -f`
 
 ## Security

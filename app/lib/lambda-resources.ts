@@ -77,7 +77,7 @@ export class LambdaResources extends cdk.NestedStack {
       ),
       handler: "index.lambda_handler",
       layers: [sciPyMXNetLayer],
-      memorySize: 3072,
+      memorySize: 3008,
       timeout: cdk.Duration.seconds(30),
     });
 
@@ -155,6 +155,7 @@ export class LambdaResources extends cdk.NestedStack {
         accessLogDestination: new api.LogGroupLogDestination(apiLog),
         accessLogFormat: api.AccessLogFormat.jsonWithStandardFields(),
       },
+      cloudWatchRole: true,
     });
     const resource = predictApi.root.addResource("predict");
     resource.addMethod("POST", predictInteration, {

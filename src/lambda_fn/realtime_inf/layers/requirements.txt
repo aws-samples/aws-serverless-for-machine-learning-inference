@@ -1,4 +1,4 @@
-mxnet==1.6.0
+mxnet==1.9.1
 numpy==1.19.5
 urllib3==1.26.5
 certifi==2022.12.7

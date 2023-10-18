@@ -1,6 +1,6 @@
 mxnet==1.9.1
 numpy==1.19.5
-urllib3==1.26.5
+urllib3==1.26.18
 certifi==2022.12.7
 idna==2.10
 graphviz==0.8.4
